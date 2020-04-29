@@ -17,6 +17,10 @@
                         </div>
                         <div class="au-task js-list-load">
                             <div class="au-task__title">
+                                <form action="http://localhost:5000/sentimental" method="POST" enctype="multipart/form-data">
+                                    <input type="file" name="file-name">
+                                    <button class="au-btn au-btn-load js-load-btn">Submit</button>
+                                </form>
                                 <p>Drag and Drop files below</p>
                             </div>
                             <div class="au-task__footer">

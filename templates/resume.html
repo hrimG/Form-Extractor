@@ -17,7 +17,12 @@
                         </div>
                         <div class="au-task js-list-load">
                             <div class="au-task__title">
+                                <form action="http://localhost:5000/resume" method="POST" enctype="multipart/form-data">
+                                    <input type="file" name="file-name">
+                                    <button class="au-btn au-btn-load js-load-btn">Submit</button>
+                                </form>
                                 <p>Drag and Drop files below</p>
+                                
                             </div>
                             <div class="au-task__footer">
                                 <button class="au-btn au-btn-load js-load-btn">Submit</button>
@@ -44,6 +49,15 @@
                                             </div>
                                         </div>
                                         <span class="nick">
+                                            <h1>Resume</h1>
+                                            {% for i in text_data: %}
+                                            <li>{{ i[0] -}}</li>
+                                            {% for j in i[1]%}
+                                            <li>{{ j }}</li>
+                                            {% endfor %}
+                                            <h1>END</h1>
+                                            <br/>
+                                            
                                         </span>
                                     </div>
                                 </div>
