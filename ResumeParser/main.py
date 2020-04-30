@@ -21,8 +21,11 @@ PHONE_REGEX = r"\+?\d[\d -]{8,12}\d"
 def transform(observations, nlp,resume_string):
     logging.info('Begin transform')
     observations['candidate_name'] = candidate_name_extractor(resume_string, nlp)
+    observations['candidate_name'] = [observations['candidate_name']]
     observations['email'] = regex_match(resume_string, EMAIL_REGEX)
+    observations['email'] = [observations['email']]
     observations['phone'] = regex_match(resume_string, PHONE_REGEX)
+    observations['phone'] = [observations['phone']]
     observations = extract_fields(observations,resume_string,nlp)
     return observations, nlp
 

@@ -1,15 +1,17 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response
 from flask_restful import Resource, Api, reqparse
 import spacy
+import pandas as pd
+import json
+import os
+import csv
+from PIL import Image
+from werkzeug.utils import secure_filename
 from cloudmersive_api import extract
+from cloudmersive_extract import predict
 from ResumeParser.main import transform
 from text_summariser import generate_summary
 from ResumeAndFeedbackClassifier.test import classify
-import json
-import os
-from PIL import Image
-from werkzeug.utils import secure_filename
-from cloudmersive_extract import predict
 app = Flask(__name__)
 api= Api(app)
 app.config['SECRET_KEY']='mysecretkey'
@@ -63,12 +65,31 @@ class Resume(Resource):
         # dic[0] is tuple of lists(which contains key-value pair)
         print('DATA CONTENT OF DIC[0]',dic[0])
         headers = {'Content-Type':'text/html'}
-        return make_response(render_template('resume.html',text_data=dic[0]),200,headers)
+        keys = []
+        values = []
+        count = 0
+        with open('top_skills.csv', 'r') as csvfile: 
+            csvreader = csv.reader(csvfile) 
+            for row in csvreader:
+                if count==0:
+                    keys = row
+                    count = count+1
+                else:
+                    values = row
+        print('keys',keys)
+        print('values',values)
+        skills = []
+        for i in range(len(keys)): 
+            skills.append([keys[i],values[i]]) 
+        print('skills',skills)
+        return make_response(render_template('resume.html',text_data=dic[0],skills=skills),200,headers)
 
     def get(self):
         headers = {'Content-Type':'text/html'}
-        data={}
-        return make_response(render_template('resume.html',data=dic),200,headers)
+        dic={}
+        skills = {}
+        return make_response(render_template('resume.html',text_data=dic,skills=skills),200,headers)
+        
 
     
 class Sentimental(Resource):
@@ -81,12 +102,12 @@ class Sentimental(Resource):
         reg_dic = extract(file_path)     
         senti_output = predict(reg_dic,True)
         headers = {'Content-Type':'text/html'}
-        return make_response(render_template('sentimental.html',text_data=senti_output['label']),200,headers)
+        return make_response(render_template('sentimental.html',text_data=senti_output),200,headers)
 
     def get(self):
         headers = {'Content-Type':'text/html'}
         dic=""
-        return make_response(render_template('sentimental.html',data=dic),200,headers)
+        return make_response(render_template('sentimental.html',text_data=dic),200,headers)
 
 
 class Summarizer(Resource):

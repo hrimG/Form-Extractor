@@ -1,3 +1,8 @@
+import warnings
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+warnings.filterwarnings('ignore')
+
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
