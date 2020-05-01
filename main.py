@@ -11,7 +11,7 @@ from cloudmersive_api import extract
 from cloudmersive_extract import predict
 from ResumeParser.main import transform
 from text_summariser import generate_summary
-from ResumeAndFeedbackClassifier.test import classify
+from ResumeFeedbackClassifier.test import classify
 
 app = Flask(__name__)
 api= Api(app)
